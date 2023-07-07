@@ -5,7 +5,7 @@ function Carousel({ data }) {
     <CarouselSection>
       <CarouselImg src={data.img} alt="대표사진" />
       <div className="w-[420px]">
-        <div className="carousel-title mb-[10px]">{data.store_name}</div>
+        <div className="carousel-title mb-[10px]">{data.storeName}</div>
         <div className="font-bold text-lg mb-[30px]">{data.body}</div>
         <button className="bg-white px-[10px] py-[8px] font-bold rounded-[10px]">자세히 보기</button>
       </div>
@@ -16,7 +16,6 @@ function Carousel({ data }) {
 export default Carousel;
 
 const CarouselSection = tw.section`
-  bg-[#67C2E4]
   w-[100vw] h-[400px]
   mb-5
   flex justify-center items-center
