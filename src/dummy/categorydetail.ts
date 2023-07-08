@@ -17,19 +17,19 @@ export const categorydetail = {
   createdAt: '2022-11-11',
   items: [
     {
-      item: '[제주함덕]체험권 씨워커 씨워킹',
+      itemName: '[제주함덕]체험권 씨워커 씨워킹',
       price: 50000,
       totalTicket: 10,
       remainingTicket: 8
     },
     {
-      item: '[제주함덕] 보트 체험 스쿠버다이빙 이용권',
+      itemName: '[제주함덕] 보트 체험 스쿠버다이빙 이용권',
       price: 80000,
       totalTicket: 10,
       remainingTicket: 4
     },
     {
-      item: '[제주함덕] 체험 스쿠버다이빙 이용권',
+      itemName: '[제주함덕] 체험 스쿠버다이빙 이용권',
       price: 100000,
       totalTicket: 10,
       remainingTicket: 2
@@ -39,5 +39,40 @@ export const categorydetail = {
     'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20210830_219%2F1630288731361ioS1v_PNG%2FXO231AVxY-Vxj7hPLaSMyeID.png&type=sc960_832',
     'https://search.pstatic.net/common/?src=http%3A%2F%2Fshop1.phinf.naver.net%2F20210326_189%2F16167466076970y1yc_JPEG%2F17882450398820589_709667322.jpg&type=sc960_832',
     'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220615_292%2F1655261607103EMqkg_JPEG%2FGOPR6304.JPG&type=sc960_832'
+  ]
+}
+
+export const userInfo = {
+  nickname: '김태우',
+  email: 'lkj@gmail.com',
+  phoneNumber: '010-1111-1111',
+  profileImg:'https://s3endpoint.com/img.jpg'
+}
+
+export const review = {
+  reviewCount: 20,
+  ratingAvg: 4.5,
+  reviews: [
+    {
+      profileImage: '23fsdfe.png',
+      nickname: 'taewoo123',
+      content: '사장님이 너무 친절해서 재밌었어용',
+      rating: 4.5,
+      createdAt: '2022-22-22 22:22:22'
+    },
+    {
+      profileImage:'awefsdf.png',
+      nickname: 'leoleo1004',
+      content: '사장님이 헬창이에요',
+      rating: 4,
+      createdAt: '2022-22-22 22:22:22'
+    },
+    {
+      profileImage:'awefsdf.png',
+      nickname: 'dongwoo91',
+      content: '너무 죠습니다~ 화이팅~!',
+      rating: 5,
+      createdAt: '2022-22-22 22:22:22'
+    },
   ]
 }

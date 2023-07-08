@@ -4,7 +4,7 @@ import { FiClock, FiPhone } from 'react-icons/fi';
 
 function DetailContent({ data }) {
   return (
-    <section className="w-[600px]">
+    <section className="w-[600px] mb-14">
       <DetailCategoryName>{data.category}</DetailCategoryName>
       <DetailTitle>{data.storeName}</DetailTitle>
       <ImgBox>
