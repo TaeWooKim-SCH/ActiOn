@@ -25,13 +25,13 @@ function Header() {
   const handleClick = () => {
     nevigate('/home');
   };
-  const handlePartnerClick = () => {
-    setIsPartner(!isPartner);
-  };
+  // const handlePartnerClick = () => {
+  //   setIsPartner(!isPartner);
+  // };
   const handleDropdownClick = () => {
     setIsOpen(!isOpen);
   };
-  console.log(setIsLogin, handlePartnerClick);
+  console.log(setIsLogin);
   return (
     <HaederContainer>
       <LogoContainer>
