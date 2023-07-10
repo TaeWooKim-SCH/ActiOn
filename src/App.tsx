@@ -3,6 +3,7 @@ import React from 'react';
 import Header from './components/Header/Header';
 import MainRouter from './router/MainRouter';
 import CategoryRouter from './router/CategoryRouter';
+import MyRouter from './router/MyRouter';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Header />
       <MainRouter />
       <CategoryRouter />
+      <MyRouter />
     </>
   );
 }

@@ -3,6 +3,7 @@ import tw from "tailwind-styled-components";
 
 import emptyStar from '../../assets/emptyStar.svg';
 import fillStar from '../../assets/fillStar.svg';
+import ReviewCard from "./ReviewCard";
 
 function Review({ data }) {
   const [stars, setStars] = useState([false, false, false, false, false])
@@ -27,7 +28,7 @@ function Review({ data }) {
         <ReviewLeftBox>
           <div className="text-center text-3xl font-bold mb-2">{data.ratingAvg.toFixed(1)}</div>
           <div className="relative">
-            <img className="absolute w-[200px]" src={emptyStar} alt="빈별" />
+            <img className="absolute max-w-[150px]" src={emptyStar} alt="빈별" />
             <div className="absolute overflow-hidden" style={{ width: `${avg}%` }}>
               <img src={fillStar} className="star" alt="꽉찬별" />
             </div>
@@ -38,8 +39,8 @@ function Review({ data }) {
             <div className="pt-1">레저는 만족 하셨나요?</div>
             <div className="mr-12">
               {stars.map((star, idx) => {
-                return star ? <Stars onClick={() => starClickHandler(idx)}>★</Stars> :
-                <Stars onClick={() => starClickHandler(idx)}>☆</Stars>
+                return star ? <Stars onClick={() => starClickHandler(idx)} key={idx}>★</Stars> :
+                <Stars onClick={() => starClickHandler(idx)} key={idx}>☆</Stars>
               })}
             </div>
             <ReviewBtn className="font-normal" type="button">등록하기</ReviewBtn>
@@ -47,6 +48,7 @@ function Review({ data }) {
           <ReviewTextarea placeholder="액티온이 더 훈훈해지는 댓글 부탁드립니다." />
         </ReviewRightBox>
       </div>
+      {data.reviews.map((review, idx) => <ReviewCard review={review} key={idx} />)}
     </section>
   );
 }

@@ -58,21 +58,21 @@ export const review = {
       nickname: 'taewoo123',
       content: '사장님이 너무 친절해서 재밌었어용',
       rating: 4.5,
-      createdAt: '2022-22-22 22:22:22'
+      createdAt: '2022-2-22'
     },
     {
       profileImage:'awefsdf.png',
       nickname: 'leoleo1004',
       content: '사장님이 헬창이에요',
       rating: 4,
-      createdAt: '2022-22-22 22:22:22'
+      createdAt: '2022-12-22'
     },
     {
       profileImage:'awefsdf.png',
       nickname: 'dongwoo91',
       content: '너무 죠습니다~ 화이팅~!',
-      rating: 5,
-      createdAt: '2022-22-22 22:22:22'
+      rating: 3.5,
+      createdAt: '2022-9-22'
     },
   ]
 }
