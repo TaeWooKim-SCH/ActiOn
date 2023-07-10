@@ -32,6 +32,7 @@ function Header() {
     setIsOpen(!isOpen);
   };
   console.log(setIsLogin);
+  console.log(setIsPartner);
   return (
     <HaederContainer>
       <LogoContainer>
