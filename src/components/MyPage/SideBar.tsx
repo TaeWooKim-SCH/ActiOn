@@ -1,42 +1,26 @@
+import { Link } from 'react-router-dom';
 import {
   SideContainer,
   SideSpace,
   SideTitle,
   SideList,
-  SideLink
 } from '../../styles/MyPage/SideBar';
 
-function SideBar({ onTabSelect }) {
+function SideBar() {
   return (
     <SideContainer>
       <SideSpace>
         <SideTitle>마이페이지</SideTitle>
         <SideList>
-            <SideLink
-                onClick={() => onTabSelect('info')}
-            >
-                내 정보 관리
-            </SideLink>
-            <SideLink
-                onClick={() => onTabSelect('wish')}
-            >
-                위시리스트
-            </SideLink>
-            <SideLink
-                onClick={() => onTabSelect('order')}
-            >
-                예약 내역 조회
-            </SideLink>
+          <Link to="/my">내 정보 관리</Link>
+          <Link to="/my/wish">위시리스트</Link>
+          <Link to="/my/order">예약 내역 조회</Link>
         </SideList>
       </SideSpace>
       <SideSpace>
         <SideTitle>파트너쉽</SideTitle>
         <SideList>
-            <SideLink
-                onClick={() => onTabSelect('stores')}
-            >
-                판매 서비스 관리
-            </SideLink>
+          <Link to="/my/stores">판매 서비스 관리</Link>
         </SideList>
       </SideSpace>
     </SideContainer>
