@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import {
   PaymentWidgetInstance,
   loadPaymentWidget,
-  ANONYMOUS
 } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import { useRecoilValue } from "recoil";
@@ -10,7 +9,7 @@ import { totalPrice } from "../store/categoryDetailAtom";
 
 const selector = "#payment-widget";
 const clientKey = 'test_ck_dP9BRQmyarY0eEomwzZVJ07KzLNk';
-const secretKey = 'test_sk_7DLJOpm5Qrl0eEYvlG0rPNdxbWnY';
+// const secretKey = 'test_sk_7DLJOpm5Qrl0eEYvlG0rPNdxbWnY';
 const customerKey = "YbX2HuSlsC9uVJW6NMRMj";
 
 function Payments() {
@@ -59,25 +58,14 @@ function Payments() {
   }, [price]);
 
   return (
-    <section>
-      <span>{`${price.toLocaleString()}원`}</span>
-      {/* <div>
-        <label>
-          <input
-            type="checkbox"
-            onChange={(event) => {
-              setPrice(event.target.checked ? price - 5_000 : price + 5_000);
-            }}
-          />
-          5,000원 할인 쿠폰 적용
-        </label>
-      </div> */}
+    <section className="w-[600px] mx-auto mt-[200px]">
+      <span className="text-xl font-bold text-[#4771B7]">총 결제금액: {`${price.toLocaleString()}원`}</span>
       <div id="payment-widget" />
       <div id="agreement" />
       <button
+        className="border-2 border-[#4771B7] px-3 py-1 font-bold rounded-[10px] text-[#4771B7] mx-auto block hover:bg-[#d8ecfc] duration-500"
         onClick={async () => {
           const paymentWidget = paymentWidgetRef.current;
-
           try {
             // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
             // https://docs.tosspayments.com/reference/widget-sdk#requestpayment결제-정보
