@@ -15,6 +15,7 @@ import {
   PaymentButton,
   InputContainer,
   ModifyButton,
+  UseCompleteButton,
 } from '../styles/Reservation/ReservationModify';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -53,7 +54,16 @@ function ReservationModify() {
     setName(e.currentTarget.value);
   };
   const HandlerPhone = (e) => {
-    setPhone(e.currentTarget.value);
+    const value = e.target.value;
+    const phoneNumberPattern = /(\d{3})(\d{3,4})(\d{4})/;
+    let contactVerify = value.replace(/[^0-9]/g, '');
+    if (contactVerify.length >= 11) {
+      contactVerify = contactVerify.replace(phoneNumberPattern, '$1-$2-$3');
+    }
+    if (contactVerify.length >= 14) {
+      return;
+    }
+    return setPhone(contactVerify);
   };
   const HandlerEmail = (e) => {
     setEmail(e.currentTarget.value);
@@ -64,7 +74,10 @@ function ReservationModify() {
     try {
       fetch(`${url}/reservations/${reservationId}`, {
         method: 'PATCH',
-        headers: { Authorization: sessionStorage.getItem('Authorization') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: sessionStorage.getItem('Authorization')
+        },
         body: JSON.stringify({
           reservationName: name,
           reservationPhone: phone,
@@ -86,6 +99,24 @@ function ReservationModify() {
         headers: { Authorization: sessionStorage.getItem('Authorization') },
       });
       navigate('/my/order'); // 예약내역 조회 페이지로 이동
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //이용 완료
+  const useCompleteHandler = () => {
+    const useConfirm = confirm('정말 이용 완료 처리하시겠습니까?');
+    if (!useConfirm) {
+      return;
+    }
+    try {
+      fetch(`${url}/reservationsUsed/${reservationId}`, {
+        method: 'POST',
+        headers: { Authorization: sessionStorage.getItem('Authorization') },
+      });
+      window.location.href = '/my/order'
     } catch (error) {
       console.error(error);
     }
@@ -109,7 +140,7 @@ function ReservationModify() {
   }, [reservationId]);
 
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <ReservationContainer>
         <ReservationTitle>{data.storeName}</ReservationTitle>
         <Title>예약정보</Title>
@@ -145,7 +176,7 @@ function ReservationModify() {
                 value={phone}
                 onChange={HandlerPhone}
                 maxLength={13}
-                placeholder="010-0000-0000"
+                placeholder="'-'를 제외하고 입력해주세요"
               />
               <InputRequire>필수</InputRequire>
             </div>
@@ -181,8 +212,11 @@ function ReservationModify() {
           </ul>
         </RuleBox>
         <PaymentButton type="button" onClick={handleCancel}>
-          예약취소
+          예약 취소
         </PaymentButton>
+        <UseCompleteButton type="button" onClick={useCompleteHandler}>
+          이용 완료
+        </UseCompleteButton>
       </PaymentInfoBox>
     </div>
   );

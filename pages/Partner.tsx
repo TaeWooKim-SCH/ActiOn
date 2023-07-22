@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { isLoginState } from '../store/userInfoAtom';
 import { 
   RepresentativeName, 
   RegistrationNumber, 
@@ -20,7 +22,8 @@ import {
 function Partner() {
   const APIURL = import.meta.env.VITE_APP_API_URL
   const navigate = useNavigate();
-
+  
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const [regiNumber, setRegiNumber] = useState('');
   const [repreName, setRepreName] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -39,7 +42,7 @@ function Partner() {
 
   const isRegiNumberValid = regiNumber.match(/^\d{3}-\d{2}-\d{5}$/);
   const isRegiNumberIncomplete = regiNumber.length > 0 && !isRegiNumberValid;
-
+  console.log(isLogin);
   useEffect(() => {
     setIsInputTouched(true);
   }, []);
@@ -71,7 +74,8 @@ function Partner() {
           'Content-Type': 'application/json',
           'Authorization': ACCESS_TOKEN
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -79,7 +83,10 @@ function Partner() {
         console.log('Status', response.status);
         if(response.status === 201) {
           console.log('201 Created');
-          navigate('/home');
+          alert('파트너등록이 완료되었습니다. 다시 로그인 해주세요.')
+          setIsLogin(false);
+          sessionStorage.removeItem('Authorization');
+          navigate('/login');
         }
       } else {
         // 등록 실패한 경우 처리
@@ -101,7 +108,7 @@ function Partner() {
             파트너 등록하기
           </RegiTitle>
           <FormContainer>
-            <RepresentativeName 
+            <RepresentativeName
               repreName={repreName}
               handleRepreNameChange={(e) => setRepreName(e.target.value)}
             />
@@ -136,7 +143,7 @@ function Partner() {
               businessSector={businessSector}
               setBusinessSector={setBusinessSector}
             />
-            <FormRegistration 
+            <FormRegistration
               isFormValid={isFormValid}
               handleSubmit={handleSubmit}
             />
