@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import page3 from '../../assets/page3.svg';
+import page5 from '../../assets/page5.svg';
 import w_top from '../../assets/w_top.svg';
 import w_bottom from '../../assets/w_bottom.svg';
 
@@ -16,8 +16,8 @@ function Page3() {
   const navigate = useNavigate();
 
   return (
-    <Wrapper id="page3">
-      <a href="#page2">
+    <Wrapper id="page5">
+      <a href="#page4">
         <img
           src={w_top}
           className="w-[80px] mt-[15px] animate-topbounce cursor-pointer duration-500 ease-in-out hover:w-[100px]"
@@ -25,7 +25,7 @@ function Page3() {
       </a>
       <PageContainer>
         <img
-          src={page3}
+          src={page5}
           data-aos="fade-right"
           data-aos-easing="ease-in-out"
           data-aos-duration="1000"
@@ -38,8 +38,8 @@ function Page3() {
             data-aos-easing="ease-in-out"
             data-aos-duration="1000"
           >
-            제주도의 모든 레저를
-            <br /> 지도로 편리하게 확인해 보세요 !
+            다양한 결제 방식으로
+            <br /> 쉽고 빠르게 결제를 진행해 보세요 !
           </MainText>
           <SubText
             data-aos="flip-right"
@@ -47,7 +47,7 @@ function Page3() {
             data-aos-easing="ease-in-out"
             data-aos-duration="1000"
           >
-            추천상품도 놓치지 말고 확인해 보세요 .
+            결제 완료 후 예약내역을 확인해 보세요.
           </SubText>
           <HomeBtn
             data-aos="flip-right"
@@ -56,16 +56,21 @@ function Page3() {
             data-aos-duration="1000"
             onClick={() => navigate('/home')}
           >
-            홈으로 이동하기
+            엑티온 시작하기
           </HomeBtn>
         </TextContainer>
       </PageContainer>
-      <a href="#page4">
-        <img
-          src={w_bottom}
-          className="w-[80px] mb-[15px] animate-bounce cursor-pointer duration-500 ease-in-out hover:w-[100px]"
-        />
-      </a>
+      <div className="flex flex-col items-center mb-[10px]">
+        <div className="font-medium text-white text-[18px] ml-1">
+          다시 감상하려면 누르세요!
+        </div>
+        <a href="#page1">
+          <img
+            src={w_bottom}
+            className="w-[80px] mt-[5px] animate-bounce cursor-pointer duration-500 ease-in-out hover:w-[100px]"
+          />
+        </a>
+      </div>
     </Wrapper>
   );
 }

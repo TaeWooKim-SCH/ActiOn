@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import {
   StyleContainer,
@@ -24,10 +23,14 @@ function Register() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
+  const [isClicked, setIClicked] = useState(false);
+
   // 오류메세지 상태 저장
   const [emailMessage, setEmailMessage] =
     useState('올바른 이메일 형식이 아닙니다.');
-  const [nameMessage, setNameMessage] = useState('영문 숫자로만 입력해주세요.');
+  const [nameMessage, setNameMessage] = useState(
+    '영문과 숫자를 모두 포함해서 입력해주세요.'
+  );
   const [passwordMessage, setPasswordMessage] = useState(
     '영문, 숫자, 특수문자를 포함하여 8자 이상이어야 합니다.'
   );
@@ -59,7 +62,7 @@ function Register() {
     if (nameRegExp.test(currentName)) {
       setNameMessage('사용 가능한 닉네임 입니다.');
     } else {
-      setNameMessage('영문 숫자로만 입력해주세요.');
+      setNameMessage('영문과 숫자를 모두 포함해서 입력해주세요.');
     }
   };
 
@@ -85,15 +88,23 @@ function Register() {
       setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.');
     }
   };
+  const [formattedPhoneNumber, setFormattedPhoneNumber] = useState('');
 
   const onChangePhone = (e) => {
     const currentPhone = e.target.value;
     setPhone(currentPhone);
-    const phoneRegExp = /^(01[016789]{1})-[0-9]{3,4}-[0-9]{4}$/;
-    if (phoneRegExp.test(currentPhone)) {
+    const phoneRegExp = /^(010)-[0-9]{4}-[0-9]{4}$/;
+    let formattedNumber = '';
+
+    formattedNumber = currentPhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+
+    setPhone(formattedNumber);
+    setFormattedPhoneNumber(formattedNumber);
+
+    if (phoneRegExp.test(formattedNumber)) {
       setPhoneMessage('올바른 전화번호 형식입니다.');
     } else {
-      setPhoneMessage('전화번호에 -를 추가해주세요.');
+      setPhoneMessage('전화번호에 -를 제외하고 입력해 주세요.');
     }
   };
 
@@ -117,10 +128,12 @@ function Register() {
     passwordConfirmMessage,
     phoneMessage,
   ]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('hi');
+    setIClicked(true);
+    if (isClicked) {
+      return;
+    }
     if (!isSubmitDisabled) {
       try {
         const res = await fetch(`${url}/signup`, {
@@ -137,14 +150,36 @@ function Register() {
         });
         if (res.ok) {
           toast('회원가입을 성공했습니다 !');
-          navigate('/login');
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000);
+        } else if (res.status === 403) {
+          toast('🚨 중복된 이메일입니다.');
+          setTimeout(() => {
+            setIClicked(false);
+          }, 3000);
+        } else if (res.status === 409) {
+          toast('🚨 중복된 닉네임입니다.');
+          setTimeout(() => {
+            setIClicked(false);
+          }, 3000);
+        } else if (res.status === 422) {
+          toast('🚨 중복된 전화번호입니다.');
+          setTimeout(() => {
+            setIClicked(false);
+          }, 3000);
         }
       } catch (error) {
         console.error('회원가입 요청 중 오류가 발생했습니다', error);
-        toast('회원가입을 실패했습니다');
+        setTimeout(() => {
+          setIClicked(false);
+        }, 3000);
       }
     } else {
-      toast('🚨 가입조건을 모두 만족해주세요 !');
+      alert('🚨 가입조건을 모두 만족해주세요 !');
+      setTimeout(() => {
+        setIClicked(false);
+      }, 3000);
     }
   };
 
@@ -153,13 +188,19 @@ function Register() {
     window.location.href = `${url}/oauth2/authorization/google`;
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  };
+
   return (
     <StyleContainer>
       <ToastContainer
         toastClassName={
           'h-[20px] rounded-md text-sm font-medium bg-[#EDF1F8] text-[#4771B7] text-center mt-[70px]'
         }
-        position="top-right"
+        position="top-center"
         limit={1}
         closeButton={false}
         autoClose={3000}
@@ -169,21 +210,36 @@ function Register() {
         <div className="flex pt-2">
           <Label htmlFor="email">이메일</Label>
           <InputContainer>
-            <Input id="email" type="email" onChange={onChangeEmail} />
+            <Input
+              id="email"
+              type="email"
+              onChange={onChangeEmail}
+              onKeyDown={handleKeyDown}
+            />
             <Message>{emailMessage}</Message>
           </InputContainer>
         </div>
         <div className="flex pt-2">
           <Label htmlFor="name">닉네임</Label>
           <InputContainer>
-            <Input id="name" type="text" onChange={onChangeName} />
+            <Input
+              id="name"
+              type="text"
+              onChange={onChangeName}
+              onKeyDown={handleKeyDown}
+            />
             <Message>{nameMessage}</Message>
           </InputContainer>
         </div>
         <div className="flex pt-2 pr-[12px]">
           <Label htmlFor="password">비밀번호</Label>
           <InputContainer>
-            <Input id="password" type="password" onChange={onChangePassword} />
+            <Input
+              id="password"
+              type="password"
+              onChange={onChangePassword}
+              onKeyDown={handleKeyDown}
+            />
             <Message>{passwordMessage}</Message>
           </InputContainer>
         </div>
@@ -194,6 +250,7 @@ function Register() {
               id="passwordConfirm"
               type="password"
               onChange={onChangePasswordConfirm}
+              onKeyDown={handleKeyDown}
             />
             <Message>{passwordConfirmMessage}</Message>
           </InputContainer>
@@ -203,8 +260,11 @@ function Register() {
           <InputContainer>
             <Input
               id="phone"
-              type="tel"
+              type="text"
+              value={formattedPhoneNumber}
+              pattern="\d{3}-\d{3,4}-\d{4}"
               onChange={onChangePhone}
+              onKeyDown={handleKeyDown}
               maxLength={13}
             />
             <Message>{phoneMessage}</Message>
@@ -224,7 +284,7 @@ function Register() {
           bgColor="#4771B7"
           color="#FFFFFF"
           clickHandler={handleSubmit}
-          // disabled={isSubmitDisabled}
+          disabled={isClicked}
         >
           <span className="font-medium">가입 진행하기</span>
         </Button>

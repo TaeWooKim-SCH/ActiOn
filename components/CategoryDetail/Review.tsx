@@ -46,14 +46,20 @@ function Review() {
         },
         body: JSON.stringify(form)
       })
-      if (!res.ok) {
+      if (res.status === 409) {
+        return alert ('이미 리뷰를 작성하였습니다.');
+      }
+      else if (res.status === 400) {
+        return alert ('비속어가 포함되어 있습니다.');
+      }
+      else if (!res.ok) {
         return alert('리뷰를 등록할 수 없습니다.');
       }
       alert('리뷰가 등록되었습니다.');
       window.location.reload();
     }
     catch(error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -65,7 +71,7 @@ function Review() {
       setData(json);
     }
     catch(error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

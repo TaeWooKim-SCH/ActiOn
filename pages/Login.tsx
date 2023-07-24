@@ -19,6 +19,7 @@ function Login() {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_APP_API_URL;
 
+  const [isClicked, setIClicked] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
 
@@ -35,17 +36,18 @@ function Login() {
     setPassWord(event.currentTarget.value);
   };
 
-  const handleGoogleLogin = async (e) => {
-    e.preventDefault();
-    window.location.href = `${url}/oauth2/authorization/google`;
-  };
-
   //일반로그인 -> 공통으로 뺄 것.....axios
   const handleLogin = async (e) => {
+    setIClicked(true);
+    if (isClicked) {
+      return;
+    }
+    //true
     e.preventDefault();
     try {
       const res = await fetch(`${url}/auth/login`, {
         method: 'POST',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify({
           username: email,
           password: password,
@@ -53,36 +55,55 @@ function Login() {
         credentials: 'include',
       });
       const result1 = await res.json();
-      console.log(result1);
-      if (res.status !== 200) throw res;
 
       //헤더에서 멤버아이디와 닉네임을 받아옴
       const Authorization = res.headers.get('Authorization');
       const name = result1.nickname;
       const profile = result1.profileImage;
       const role = result1.role;
-      console.log(profile);
-      setIsProfile(profile);
-      setIsRole(role);
-      // 로컬 스토리지에 memberId,토큰 저장
-      sessionStorage.setItem('Authorization', Authorization);
-      setIsLoginState(true);
-      if (name) {
-        toast(`🌊 ${name}님 반갑습니다 `);
+      if (res.ok) {
+        setIsLoginState(true);
+        toast(`🌊 로그인 성공 ! ${name}반갑습니다 `);
         setTimeout(() => {
           navigate('/home');
+          setIsLoginState(true);
         }, 2000);
+
+        // //헤더에서 멤버아이디와 닉네임을 받아옴
+
+        // 받아온 데이터 전역에 저장
+        setIsProfile(profile);
+        setIsRole(role);
+        // 로컬 스토리지에 memberId,토큰 저장
+        sessionStorage.setItem('Authorization', Authorization);
+      } else if (res.status === 401) {
+        toast('🚨 이메일과 비밀번호를 정확하게 입력해주세요');
+        setTimeout(() => {
+          setIClicked(false);
+        }, 3000);
       }
     } catch (error) {
       console.error(error);
-      toast(`🚨 이메일과 비밀번호를 정확하게 입력해주세요`);
+      toast(`🚨 로그인에 실패했습니다!`);
+      setTimeout(() => {
+        setIClicked(false);
+      }, 3000);
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      setIClicked(true);
+      if (isClicked) {
+        return;
+      }
       handleLogin(e);
     }
+  };
+
+  const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+    window.location.href = `${url}/oauth2/authorization/google`;
   };
 
   return (
@@ -91,8 +112,8 @@ function Login() {
         toastClassName={
           'h-[20px] rounded-md text-sm font-medium bg-[#EDF1F8] text-[#4771B7] text-center mt-[70px]'
         }
-        position="top-right"
-        limit={10}
+        position="top-center"
+        limit={1}
         closeButton={false}
         autoClose={2000}
         hideProgressBar
@@ -112,6 +133,7 @@ function Login() {
               value={email}
               onChange={onEmailHandler}
               className="border border-[#9A9A9A] text-[13px] h-[30px] w-[200px] ml-4 rounded-md mb-3 p-2"
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div>
@@ -135,7 +157,12 @@ function Login() {
             <span className="font-medium">구글로 로그인하기</span>
           </div>
         </Button>
-        <Button bgColor="#4771B7" color="#FFFFFF" clickHandler={handleLogin}>
+        <Button
+          bgColor="#4771B7"
+          color="#FFFFFF"
+          clickHandler={handleLogin}
+          // disabled={isClicked}
+        >
           <span className="font-medium">로그인</span>
         </Button>
       </LoginContainer>

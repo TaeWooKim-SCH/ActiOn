@@ -36,16 +36,16 @@ function CategoryCard({ data }: CProps) {
   const [isHeartClicked, setIsHeartClicked] = useState(false);
   const [isHeart, setIsHeart] = useState(isLike);
   const isLogin = useRecoilValue(isLoginState);
-  // 타이머 변수
-  let clickTimer;
-  console.log(clickTimer);
 
   // 상태코드 보고 UI 변경시키기 ..
   const onClickHeart = async () => {
+    setIsHeartClicked(true);
+    if (isHeartClicked) {
+      return;
+    }
     if (!isLogin) {
       alert(`로그인 상태에서만 등록할 수 있습니다.`);
     } else if (!isHeartClicked) {
-      setIsHeartClicked(true);
       const res = await fetch(`${url}/stores/favorites/${storeId}`, {
         method: 'POST',
         headers: { Authorization: sessionStorage.getItem('Authorization') },
@@ -56,32 +56,37 @@ function CategoryCard({ data }: CProps) {
       }
     }
 
-    clickTimer = setTimeout(() => {
+    setTimeout(() => {
       setIsHeartClicked(false);
     }, 5000);
   };
 
   const onClickNonHeart = async () => {
+    setIsHeartClicked(true);
+    if (isHeartClicked) {
+      return;
+    }
     if (!isHeartClicked) {
-      setIsHeartClicked(true);
-
       const res = await fetch(`${url}/stores/favorites/${storeId}`, {
         method: 'DELETE',
         headers: { Authorization: sessionStorage.getItem('Authorization') },
       });
-      // console.log(isLike);
       if (res.ok) {
         setIsHeart(false);
-        toast('🩶 위시리스트에서 제거되었습니다.');
+        toast('🖤 위시리스트에서 제거되었습니다.');
       }
     }
-    clickTimer = setTimeout(() => {
+    setTimeout(() => {
       setIsHeartClicked(false);
     }, 5000);
   };
   return (
-    <CardContainer data-aos="fade-up">
-      <img className="w-[250px] h-[198px] object-cover" src={img} />
+    <CardContainer>
+      <img
+        className="w-[250px] h-[198px] object-cover"
+        src={img}
+        loading="lazy"
+      />
       <CardText>
         <Link to={`/category/${storeId}`} className="font-semibold">
           {title}
