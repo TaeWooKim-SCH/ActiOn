@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { RiMapPinLine } from 'react-icons/ri';
 import { FiClock, FiPhone } from 'react-icons/fi';
+import { ToastContainer, toast } from 'react-toastify';
+import { CopyToClipboard } from "react-copy-to-clipboard/src";
 
 import {
   DetailCategoryName,
@@ -35,6 +37,16 @@ function DetailContent() {
 
   return (
     <section className="w-[600px] mb-14">
+      <ToastContainer
+        toastClassName={
+          'h-[20px] rounded-md text-sm font-medium bg-[#EDF1F8] text-[#4771B7] text-center shadow-sm'
+        }
+        position="top-center"
+        limit={10}
+        closeButton={false}
+        autoClose={2000}
+        hideProgressBar
+      />
       <DetailCategoryName>{data.category}</DetailCategoryName>
       <DetailTitle>{data.storeName}</DetailTitle>
       <ImgBox>
@@ -44,7 +56,7 @@ function DetailContent() {
               className="flex duration-500 min-w-[1200px] overflow-hidden ease-in-out"
               style={{
                 transform: `translateX(${current * -600}px)`,
-                width: `${data.storeImages.length * 600}px`
+                width: `${data.storeImages.length * 600}px`,
               }}
             >
               {data.storeImages.map((src, idx) => (
@@ -52,12 +64,28 @@ function DetailContent() {
               ))}
             </div>
             <div className="flex justify-center items-center mt-3">
-              <div className="cursor-pointer my-auto arrow-left" onClick={arrowLeftHandler}>
-                <FaChevronLeft className="hover:fill-[#9dacc5] duration-500" size="40" color="#4771B7" />
+              <div
+                className="cursor-pointer my-auto arrow-left"
+                onClick={arrowLeftHandler}
+              >
+                <FaChevronLeft
+                  className="hover:fill-[#9dacc5] duration-500"
+                  size="40"
+                  color="#4771B7"
+                />
               </div>
-              <div className="mx-5 text-center text-xl font-bold text-[#4771B7]">{current + 1} / {data.storeImages.length}</div>
-              <div className="cursor-pointer my-auto arrow-right" onClick={arrowRightHandler}>
-                <FaChevronRight className="hover:fill-[#9dacc5] duration-500" size="40" color="#4771B7" />
+              <div className="mx-5 text-center text-xl font-bold text-[#4771B7]">
+                {current + 1} / {data.storeImages.length}
+              </div>
+              <div
+                className="cursor-pointer my-auto arrow-right"
+                onClick={arrowRightHandler}
+              >
+                <FaChevronRight
+                  className="hover:fill-[#9dacc5] duration-500"
+                  size="40"
+                  color="#4771B7"
+                />
               </div>
             </div>
           </div>
@@ -66,7 +94,12 @@ function DetailContent() {
       <StoreInfoBox>
         <div className="flex mb-2">
           <RiMapPinLine color="#4771B7" size="25" />
-          <div className="ml-2">{data.address}</div>
+          <div className="ml-2 mr-5">{data.address}</div>
+          <CopyToClipboard text={data.address} onCopy={() => toast("클립보드에 복사되었습니다.")}>
+            <button
+              className="bg-[#4771B7] rounded-[5px] text-white text-xs px-3 py-1"
+            >주소복사</button>
+          </CopyToClipboard>
         </div>
         <div className="flex mb-2">
           <FiClock color="#4771B7" size="23" />
