@@ -49,7 +49,28 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  overflow-x: hidden;
 }
+
+html::-webkit-scrollbar {
+  width: 15px;
+  background-color: rgb(255, 255, 255);
+}
+
+html::-webkit-scrollbar-track {
+  width: 10px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: rgb(168, 168, 168);
+  border-radius: 10px;
+  border: 2px solid white;
+} 
+
+html {
+  scroll-behavior: smooth;
+}
+
 
 .carousel-title {
   font-size: xx-large;
@@ -80,8 +101,45 @@ body {
 }
 
 .intro-text {
-  animation: fadeInRight 2s ease-in-out ;
+  animation: fadeInRight 0.75s ease-in-out ;
 }
+
+.animate-topbounce {
+  animation: topbounce 1s infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+@keyframes topbounce {
+
+  0%,
+  100% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: translateY(-10%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(-10%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
 
 @keyframes wheelRotate {
   0% {
